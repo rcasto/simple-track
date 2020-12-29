@@ -1,6 +1,6 @@
 {
-  "name": "analytics-lib",
-  "version": "1.0.0",
+  "name": "simple-analytics",
+  "version": "0.0.1",
   "description": "A simple library for analytics events",
   "main": "index.js",
   "scripts": {},
