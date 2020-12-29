@@ -1,7 +1,7 @@
 {
-  "name": "simple-analytics",
+  "name": "simple-track",
   "version": "0.0.1",
-  "description": "A simple library for analytics events",
+  "description": "A simple library for creating and firing off analytics events",
   "main": "index.js",
   "scripts": {},
   "author": "Richie Casto (https://github.com/rcasto)",
