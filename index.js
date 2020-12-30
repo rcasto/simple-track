@@ -35,6 +35,7 @@
 * @property {string} analyticsId - The analytics id of the current session.
 * @property {string} type - The event type or name. Anything you want really.
 * @property {object} data - The data associated with the event. null by default, but otherwise an object with properties of your choosing.
+* @property {string} timeString - An ISO formatted string representing when the event was created.
 * @property {string} eventId - A unique identifier and generated tied to the event itself.
 * @property {number} version - The version of the event schema being used.
 */
@@ -66,6 +67,7 @@ function createEvent({
         analyticsId,
         type,
         data,
+        timeString: (new Date()).toISOString(),
         eventId: generateUUID(),
         version: 1,
     };
