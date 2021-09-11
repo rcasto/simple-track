@@ -6,7 +6,7 @@ export default {
     {
       format: 'umd',
       file: 'dist/index.umd.js',
-      name: 'Edits',
+      name: 'SimpleTrack',
     },
     {
       format: 'es',
