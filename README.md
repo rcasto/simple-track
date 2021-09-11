@@ -1,5 +1,5 @@
 # simple-track
-A simple library for creating and firing off analytics events.
+A simple client side library for creating and firing off analytics events.
 
 ## Setup
 
@@ -40,7 +40,9 @@ eventGenerator.track(eventType, eventData);
 ## Additional Info
 Internally this library utilizes the [Beacon API](https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API) to fire off the event to the analytics endpoint provided from the client.
 
-At the end of the day your analytics endpoint service will receive a `POST` request with event of the following shape:
+If the Beacon API is not supported by the client, however, it will fallback to using the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
+
+At the end of the day your analytics endpoint service will receive a `POST` request with event as a JSON object of the following shape:
 ```javascript
 /**
 * @typedef Event
