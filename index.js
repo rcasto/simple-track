@@ -1,3 +1,5 @@
+// import { getCLS, getFID, getLCP } from 'web-vitals';
+
 /**
  * @typedef EventGeneratorInfo
  * @type {object}
@@ -82,12 +84,20 @@ export function createEventGenerator({
     appName,
     analyticsApiUrl,
     sessionStorageKey = 'analytics-session-id',
+    // shouldReportWebVitals = true,
 }) {
     let analyticsId = window.sessionStorage.getItem(sessionStorageKey);
     if (!analyticsId) {
         analyticsId = generateUUID();
         window.sessionStorage.setItem(sessionStorageKey, analyticsId);
     }
+
+    /**
+     * If web-vitals dependency 
+     */
+    // if (window.webVitals && shouldReportWebVitals) {
+
+    // }
 
     return {
         track: function (type, data = null) {
@@ -105,6 +115,11 @@ export function createEventGenerator({
                 window.navigator.sendBeacon(analyticsApiUrl, eventBlob);
             } else {
                 console.warn(`sendBeacon(...) is not supported by this browser`);
+                fetch(analyticsApiUrl, {
+                    method: 'POST',
+                    body: analyticsApiUrl,
+                    keepalive: true,
+                });
             }
         },
     };
