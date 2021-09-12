@@ -1,4 +1,24 @@
 import { generateUUID, createEventGenerator } from './index';
+import { IEventGenerator } from './schema';
+
+const fakeAppName = 'fake-app-name';
+const fakeAnalyticsApiUrl = 'http://fake-analytics';
+const fakeStorageKey = 'fake-storage-key';
+const fakeAnalyticsId = 'fake-stored-analytics-id';
+const fakeEventType = 'test-event';
+
+let fakeStorage: Pick<Storage, 'getItem' | 'setItem'>;
+let getItemSpy: jest.Mock;
+let setItemSpy: jest.Mock;
+
+beforeEach(() => {
+    getItemSpy = jest.fn();
+    setItemSpy = jest.fn();
+    fakeStorage = {
+        getItem: getItemSpy,
+        setItem: setItemSpy,
+    };
+});
 
 describe('generateUUID tests', () => {
     // https://stackoverflow.com/a/13653180
@@ -12,29 +32,13 @@ describe('generateUUID tests', () => {
 });
 
 describe('createEventGenerator tests', () => {
-    const fakeAppName = 'fake-app-name';
-    const fakeAnalyticsApiUrl = 'http://fake-analytics';
-    const fakeStorageKey = 'fake-storage-key';
-
-    let fakeStorage: Pick<Storage, 'getItem' | 'setItem'>;
-    let getItemSpy: jest.Mock;
-    let setItemSpy: jest.Mock;
-
-    beforeEach(() => {
-        getItemSpy = jest.fn();
-        setItemSpy = jest.fn();
-        fakeStorage = {
-            getItem: getItemSpy,
-            setItem: setItemSpy,
-        };
-    });
-
     it('should check storage at storage key', () => {
         createEventGenerator({
             appName: fakeAppName,
             analyticsApiUrl: fakeAnalyticsApiUrl,
             storageKey: fakeStorageKey,
             storage: fakeStorage,
+            generateIdentifier: generateUUID,
         });
 
         expect(fakeStorage.getItem).toHaveBeenCalledWith(fakeStorageKey);
@@ -46,19 +50,21 @@ describe('createEventGenerator tests', () => {
             analyticsApiUrl: fakeAnalyticsApiUrl,
             storageKey: fakeStorageKey,
             storage: fakeStorage,
+            generateIdentifier: generateUUID,
         });
 
         expect(fakeStorage.setItem).toHaveBeenCalledWith(fakeStorageKey, expect.any(String));
     });
 
     it('should not set storage at storage key, if already set', () => {
-        getItemSpy.mockReturnValue('fake-stored-analytics-id');
+        getItemSpy.mockReturnValue(fakeAnalyticsId);
 
         createEventGenerator({
             appName: fakeAppName,
             analyticsApiUrl: fakeAnalyticsApiUrl,
             storageKey: fakeStorageKey,
             storage: fakeStorage,
+            generateIdentifier: generateUUID,
         });
 
         expect(fakeStorage.setItem).not.toHaveBeenCalled();
@@ -70,6 +76,7 @@ describe('createEventGenerator tests', () => {
             analyticsApiUrl: fakeAnalyticsApiUrl,
             storageKey: fakeStorageKey,
             storage: fakeStorage,
+            generateIdentifier: generateUUID,
         });
 
         expect(result).toBeDefined();
@@ -77,12 +84,67 @@ describe('createEventGenerator tests', () => {
     });
 });
 
-// describe('EventGenerator instance tests', () => {
-//     let navigatorSendBeaconSpy: jest.SpyInstance;
-//     let windowFetchSpy: jest.SpyInstance;
+describe('EventGenerator instance tests', () => {
+    let eventGenerator: IEventGenerator;
 
-//     beforeEach(() => {
-//         navigatorSendBeaconSpy = jest.spyOn(window.navigator, 'sendBeacon');
-//         windowFetchSpy = jest.spyOn(window, 'fetch');
-//     });
-// });
+    let navigatorSendBeaconSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+        getItemSpy.mockReturnValue(fakeAnalyticsId);
+
+        navigatorSendBeaconSpy = jest.spyOn(global.navigator, 'sendBeacon');
+
+        eventGenerator = createEventGenerator({
+            appName: fakeAppName,
+            analyticsApiUrl: fakeAnalyticsApiUrl,
+            storageKey: fakeStorageKey,
+            storage: fakeStorage,
+            generateIdentifier: generateUUID,
+        });
+    });
+
+    it('can attempt to use sendBeacon by default, if supported', () => {
+        eventGenerator.track(fakeEventType);
+
+        expect(navigatorSendBeaconSpy).toHaveBeenCalledWith(fakeAnalyticsApiUrl, expect.any(Blob));
+    });
+
+    it('can fallback to using fetch if sendBeacon is not supported', () => {
+        // adjust global
+        const oldSendBeacon = global.navigator.sendBeacon;
+        global.navigator.sendBeacon = null;
+
+        eventGenerator.track(fakeEventType);
+
+        expect(navigatorSendBeaconSpy).not.toHaveBeenCalled();
+        expect(global.fetch).toHaveBeenCalledWith(fakeAnalyticsApiUrl, {
+            method: 'POST',
+            body: expect.any(Blob),
+            keepalive: true,
+        });
+
+        // restore global
+        global.navigator.sendBeacon = oldSendBeacon;
+    });
+
+    it('can send valid event blob', async () => {
+        const expectedEventBlob: Blob = new Blob([JSON.stringify({
+            appName: fakeAppName,
+            analyticsId: fakeAnalyticsId,
+            type: fakeEventType,
+            data: null,
+            timeString: expect.any(String),
+            eventId: expect.any(String),
+            version: 1,
+        })], {
+            type: 'application/json',
+        });
+
+        eventGenerator.track(fakeEventType);
+
+        const eventBlob: Blob = navigatorSendBeaconSpy.mock.calls[0][1];
+
+        expect(eventBlob.type).toEqual('application/json');
+        expect(eventBlob).toEqual(expectedEventBlob);
+    });
+});
