@@ -6,7 +6,7 @@ export interface IEventGeneratorInfo {
 }
 
 export interface IEventGenerator {
-    track: <T>(type: string, data: T | null) => void;
+    track: <T>(type: string, data?: T | null) => void;
 }
 
 export interface IEventInfo<T> {
