@@ -84,7 +84,7 @@ export function createEventGenerator({
                 // https://w3c.github.io/beacon/#sec-processing-model
                 fetch(analyticsApiUrl, {
                     method: 'POST',
-                    body: analyticsApiUrl,
+                    body: eventBlob,
                     keepalive: true,
                 });
             }
