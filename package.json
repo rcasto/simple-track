@@ -2,9 +2,14 @@
   "name": "simple-track",
   "version": "0.0.3",
   "description": "A simple library for creating and firing off analytics events",
-  "main": "index.js",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rollup --config rollup.config.js"
+    "build": "npm-run-all clean --parallel build:*",
+    "build:lib": "rollup --config rollup.config.js",
+    "build:types": "tsc --emitDeclarationOnly",
+    "clean": "rimraf dist"
   },
   "author": "Richie Casto (https://github.com/rcasto)",
   "license": "MIT",
@@ -13,6 +18,8 @@
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-typescript": "^7.15.0",
     "@rollup/plugin-typescript": "^8.2.5",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
     "rollup": "^2.56.3",
     "ts-node": "^10.2.1",
     "tslib": "^2.3.1",
