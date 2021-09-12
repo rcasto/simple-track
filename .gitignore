@@ -2,3 +2,4 @@ test
 simple-track-*.tgz
 node_modules
 dist
+coverage
