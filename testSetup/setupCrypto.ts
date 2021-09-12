@@ -4,9 +4,9 @@
  * 
  * https://github.com/jsdom/jsdom/issues/1612
  */
-import crypto from "crypto";
+import crypto from 'crypto';
 
-Object.defineProperty(global, "crypto", {
+Object.defineProperty(global, 'crypto', {
   value: {
     getRandomValues: crypto.randomFillSync,
   },
