@@ -46,7 +46,7 @@ export function createEventGenerator({
     sessionStorageKey = 'analytics-session-id',
     // shouldReportWebVitals = true,
 }: IEventGeneratorInfo): IEventGenerator {
-    let analyticsId = window.sessionStorage.getItem(sessionStorageKey);
+    let analyticsId: string = window.sessionStorage.getItem(sessionStorageKey) || '';
     if (!analyticsId) {
         analyticsId = generateUUID();
         window.sessionStorage.setItem(sessionStorageKey, analyticsId);
