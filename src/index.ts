@@ -45,15 +45,16 @@ function createEvent<T>({
  * @returns {IEventGenerator}
  */
 export function createEventGenerator({
-    appName,
     analyticsApiUrl,
+    appName = '',
     storageKey = 'analytics-session-id',
     storage = window.sessionStorage,
+    generateIdentifier = generateUUID,
     // shouldReportWebVitals = true,
 }: IEventGeneratorInfo): IEventGenerator {
     let analyticsId: string = storage.getItem(storageKey) || '';
     if (!analyticsId) {
-        analyticsId = generateUUID();
+        analyticsId = generateIdentifier();
         storage.setItem(storageKey, analyticsId);
     }
 

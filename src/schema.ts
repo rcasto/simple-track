@@ -3,6 +3,7 @@ export interface IEventGeneratorInfo {
     analyticsApiUrl: string;
     storageKey: string;
     storage: Pick<Storage, 'getItem' | 'setItem'>;
+    generateIdentifier: () => string;
 }
 
 export interface IEventGenerator {
