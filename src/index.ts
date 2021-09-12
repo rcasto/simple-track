@@ -79,6 +79,7 @@ export function createEventGenerator({
                 window.navigator.sendBeacon(analyticsApiUrl, eventBlob);
             } else {
                 // https://w3c.github.io/beacon/#introduction, explains setting keep-alive to true for Fetch API fallback
+                // https://w3c.github.io/beacon/#sec-processing-model
                 fetch(analyticsApiUrl, {
                     method: 'POST',
                     body: analyticsApiUrl,
