@@ -47,13 +47,14 @@ function createEvent<T>({
 export function createEventGenerator({
     appName,
     analyticsApiUrl,
-    sessionStorageKey = 'analytics-session-id',
+    storageKey = 'analytics-session-id',
+    storage = window.sessionStorage,
     // shouldReportWebVitals = true,
 }: IEventGeneratorInfo): IEventGenerator {
-    let analyticsId: string = window.sessionStorage.getItem(sessionStorageKey) || '';
+    let analyticsId: string = storage.getItem(storageKey) || '';
     if (!analyticsId) {
         analyticsId = generateUUID();
-        window.sessionStorage.setItem(sessionStorageKey, analyticsId);
+        storage.setItem(storageKey, analyticsId);
     }
 
     /**

@@ -1,7 +1,8 @@
 export interface IEventGeneratorInfo {
     appName: string;
     analyticsApiUrl: string;
-    sessionStorageKey: string;
+    storageKey: string;
+    storage: Pick<Storage, 'getItem' | 'setItem'>;
 }
 
 export interface IEventGenerator {
