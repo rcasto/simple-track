@@ -78,7 +78,7 @@ export function createEventGenerator({
             if (typeof window.navigator.sendBeacon === 'function') {
                 window.navigator.sendBeacon(analyticsApiUrl, eventBlob);
             } else {
-                console.warn(`sendBeacon(...) is not supported by this browser`);
+                // https://w3c.github.io/beacon/#introduction, explains setting keep-alive to true for Fetch API fallback
                 fetch(analyticsApiUrl, {
                     method: 'POST',
                     body: analyticsApiUrl,
