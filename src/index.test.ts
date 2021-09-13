@@ -127,7 +127,7 @@ describe('EventGenerator instance tests', () => {
         global.navigator.sendBeacon = oldSendBeacon;
     });
 
-    it('can send valid event blob', async () => {
+    it('can send valid event blob - no data/null', async () => {
         const expectedEventBlob: Blob = new Blob([JSON.stringify({
             appName: fakeAppName,
             analyticsId: fakeAnalyticsId,
@@ -141,6 +141,31 @@ describe('EventGenerator instance tests', () => {
         });
 
         eventGenerator.track(fakeEventType);
+
+        const eventBlob: Blob = navigatorSendBeaconSpy.mock.calls[0][1];
+
+        expect(eventBlob.type).toEqual('application/json');
+        expect(eventBlob).toEqual(expectedEventBlob);
+    });
+
+    it('can send valid event blob - has custom data', async () => {
+        const expectedEventBlob: Blob = new Blob([JSON.stringify({
+            appName: fakeAppName,
+            analyticsId: fakeAnalyticsId,
+            type: fakeEventType,
+            data: {
+                foo: 'bar',
+            },
+            timeString: expect.any(String),
+            eventId: expect.any(String),
+            version: 1,
+        })], {
+            type: 'application/json',
+        });
+
+        eventGenerator.track(fakeEventType, {
+            foo: 'bar',
+        });
 
         const eventBlob: Blob = navigatorSendBeaconSpy.mock.calls[0][1];
 
