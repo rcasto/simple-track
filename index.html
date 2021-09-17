@@ -6,9 +6,23 @@
     <title>simple-track test client</title>
 </head>
 <body>
+    <button id="click-me">Click me</button>
+
     <script src="dist/index.umd.js"></script>
     <script>
-        console.log(window.SimpleTrack);
+        const analyticsApiUrl = 'http://localhost:3000/analytics';
+        const eventGenerator = window.SimpleTrack.createEventGenerator({
+            analyticsApiUrl,
+        });
+        let numClickMeButtonClicks = 0;
+
+        const clickMeButton = document.getElementById('click-me');
+        clickMeButton.addEventListener('click', () => {
+            numClickMeButtonClicks++;
+            eventGenerator.track('click-me-button--clicked', {
+                numClicks: numClickMeButtonClicks,
+            });
+        });
     </script>
 </body>
 </html>
