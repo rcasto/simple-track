@@ -8,7 +8,7 @@
   "scripts": {
     "start": "npm-run-all clean --parallel start:*",
     "start:lib": "npm run build:lib -- --watch",
-    "start:server": "http-server -p 3000 ./",
+    "start:server": "http-server -p 8080 ./",
     "build": "npm-run-all clean --parallel build:*",
     "build:lib": "rollup --config rollup/rollup.config.js",
     "build:lib-min": "rollup --config rollup/rollup.config.min.js",
