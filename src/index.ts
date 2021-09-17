@@ -52,10 +52,10 @@ export function createEventGenerator({
     generateIdentifier = generateUUID,
     // shouldReportWebVitals = true,
 }: IEventGeneratorInfo): IEventGenerator {
-    let analyticsId: string = storage.getItem(storageKey) || '';
+    let analyticsId: string = storage?.getItem(storageKey) || '';
     if (!analyticsId) {
         analyticsId = generateIdentifier();
-        storage.setItem(storageKey, analyticsId);
+        storage?.setItem(storageKey, analyticsId);
     }
 
     /**
