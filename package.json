@@ -1,6 +1,6 @@
 {
   "name": "simple-track",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A simple client side library for creating and firing off analytics events.",
   "main": "dist/index.umd.js",
   "module": "dist/index.es.js",
