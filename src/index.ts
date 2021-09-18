@@ -1,5 +1,3 @@
-// import { getCLS, getFID, getLCP } from 'web-vitals';
-
 import { IEvent, IEventGenerator, IEventGeneratorInfo, IEventInfo } from "./schema";
 
 /**
@@ -50,20 +48,12 @@ export function createEventGenerator({
     storageKey = 'analytics-session-id',
     storage = window.sessionStorage,
     generateIdentifier = generateUUID,
-    // shouldReportWebVitals = true,
 }: IEventGeneratorInfo): IEventGenerator {
     let analyticsId: string = storage?.getItem(storageKey) || '';
     if (!analyticsId) {
         analyticsId = generateIdentifier();
         storage?.setItem(storageKey, analyticsId);
     }
-
-    /**
-     * If web-vitals dependency 
-     */
-    // if (window.webVitals && shouldReportWebVitals) {
-
-    // }
 
     return {
         track: function (type, data = null) {
