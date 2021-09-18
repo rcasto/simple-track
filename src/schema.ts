@@ -4,10 +4,12 @@ export interface IEventGeneratorInfo {
     storageKey: string;
     storage: Pick<Storage, 'getItem' | 'setItem'>;
     generateIdentifier: () => string;
+    doNotTrack: boolean;
 }
 
 export interface IEventGenerator {
     track: <T>(type: string, data?: T | null) => void;
+    setDoNotTrack: (doNotTrack: boolean) => void;
 }
 
 export interface IEventInfo<T> {

@@ -48,6 +48,7 @@ export function createEventGenerator({
     storageKey = 'analytics-session-id',
     storage = window.sessionStorage,
     generateIdentifier = generateUUID,
+    doNotTrack = false,
 }: IEventGeneratorInfo): IEventGenerator {
     let analyticsId: string = storage?.getItem(storageKey) || '';
     if (!analyticsId) {
@@ -56,7 +57,11 @@ export function createEventGenerator({
     }
 
     return {
-        track: function (type, data = null) {
+        track: function track(type, data = null) {
+            if (doNotTrack) {
+                return;
+            }
+
             const event = createEvent({
                 appName,
                 analyticsId,
@@ -78,6 +83,9 @@ export function createEventGenerator({
                     keepalive: true,
                 });
             }
+        },
+        setDoNotTrack: function setDoNotTrack(_doNotTrack: boolean) {
+            doNotTrack = _doNotTrack;
         },
     };
 }
