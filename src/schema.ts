@@ -1,10 +1,10 @@
 export interface IEventGeneratorInfo {
-    appName: string;
     analyticsApiUrl: string;
-    storageKey: string;
-    storage: Pick<Storage, 'getItem' | 'setItem'>;
-    generateIdentifier: () => string;
-    doNotTrack: boolean;
+    appName?: string;
+    storageKey?: string;
+    storage?: Pick<Storage, 'getItem' | 'setItem'>;
+    generateIdentifier?: () => string;
+    doNotTrack?: boolean;
 }
 
 export interface IEventGenerator {
