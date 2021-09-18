@@ -181,4 +181,25 @@ describe('EventGenerator instance tests', () => {
         expect(eventBlob.type).toEqual('application/json');
         expect(eventBlob).toEqual(expectedEventBlob);
     });
+
+    it('can initialize with doNotTrack', () => {
+        eventGenerator = createEventGenerator({
+            analyticsApiUrl: fakeAnalyticsApiUrl,
+            doNotTrack: true,
+        });
+
+        eventGenerator.track(fakeEventType);
+
+        expect(navigatorSendBeaconSpy).not.toHaveBeenCalled();
+        expect(global.fetch).not.toHaveBeenCalled();
+    });
+
+    it('can adjust doNotTrack status', () => {
+        eventGenerator.setDoNotTrack(true);
+
+        eventGenerator.track(fakeEventType);
+
+        expect(navigatorSendBeaconSpy).not.toHaveBeenCalled();
+        expect(global.fetch).not.toHaveBeenCalled();
+    });
 });
