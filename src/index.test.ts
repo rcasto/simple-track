@@ -82,6 +82,15 @@ describe('createEventGenerator tests', () => {
         expect(result).toBeDefined();
         expect(result.track).toBeDefined();
     });
+
+    it('should be ok if no storage implementaton is provided', () => {
+        const result = createEventGenerator({
+            analyticsApiUrl: fakeAnalyticsApiUrl,
+            storage: null,
+        });
+
+        expect(result).toBeDefined();
+    });
 });
 
 describe('EventGenerator instance tests', () => {
