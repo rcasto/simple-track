@@ -1,5 +1,5 @@
 import rollupCoreConfig from './rollup.config.mjs';
-import { terser } from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 
 export default {
     ...rollupCoreConfig,
