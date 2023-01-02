@@ -1,4 +1,4 @@
-import rollupCoreConfig from './rollup.config';
+import rollupCoreConfig from './rollup.config.mjs';
 import { terser } from 'rollup-plugin-terser';
 
 export default {
