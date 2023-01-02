@@ -32,6 +32,7 @@ function createEvent<T>({
         analyticsId,
         type,
         data,
+        userAgent: window.navigator.userAgent || '',
         timeString: (new Date()).toISOString(),
         eventId: generateUUID(),
         version: 1,

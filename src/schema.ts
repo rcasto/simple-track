@@ -17,6 +17,7 @@ export interface IEventInfo<T> {
     analyticsId: string;
     type: string;
     data: T;
+    userAgent?: string;
 }
 
 export interface IEvent<T> extends IEventInfo<T> {
